@@ -95,6 +95,7 @@
               color="success"
               class="mt-6"
               fab
+              @click="gantiFotoProfil()"
             >
               <v-icon dark>
                 mdi-camera-plus
@@ -114,6 +115,8 @@ import SnackBars from '@/components/SnackBars';
 
   export default {
     data: () => ({
+      show1: false,
+      valid: true,
       username: '',
       usernameRules: [
         v => !!v || 'Username masih kosong!',
@@ -127,7 +130,7 @@ import SnackBars from '@/components/SnackBars';
       alamat: '',
       alamatRules: [
         v => !!v || 'Alamat masih kosong!',
-        v => (v && v.length >= 5) || 'Alamat minimal terdiri dari 5 karakter',
+        v => (v && v.length > 5) || 'Alamat minimal terdiri dari 6 karakter',
       ],
     }),
     computed: {
@@ -147,20 +150,27 @@ import SnackBars from '@/components/SnackBars';
     },
     methods: {
       validate () {
-        if(this.$refs.form.validate())
+        if(this.$refs.form.validate() && this.alamat != '' && this.alamat.length > 5)
           this.updateProfil()
+        else
+          this.$refs.alert.show("Masih ada data yang kosong/salah!","red accent-2");
       },
       updateProfil() {
         db.collection('user').doc(this.user.uid).set({username: this.username, email: this.email, alamat: this.alamat});
         if(this.email != this.user.data.email) {
           firebase.auth().currentUser.updateEmail(this.email).then(() => {
               this.$refs.alert.show("Profil berhasil diperbaharui!","green darken-1");
+              setTimeout( () =>  window.location.reload(), 2000);
             }).catch((error) => {
               this.$refs.alert.show(error,"red accent-2");
             });
         } else {
           this.$refs.alert.show("Profil berhasil diperbaharui!","green darken-1");
+          setTimeout( () =>  window.location.reload(), 2000);
         }
+      },
+      gantiFotoProfil() {
+        this.$refs.alert.show("Maaf, fitur akan segera hadir...","yellow darken-3");
       }
     },
     components: {

@@ -54,6 +54,7 @@
 import * as firebase from "firebase";
 import SnackBars from '@/components/SnackBars';
 
+
   export default {
     name: "Login",
     components: {
@@ -95,7 +96,22 @@ import SnackBars from '@/components/SnackBars';
             this.$router.push('/');
         })
         .catch((error) => {
-          this.$refs.alert.show(error.message,"red accent-2");
+          let errMsg = ''
+          switch(error.code) {
+            case "auth/invalid-email":
+              errMsg = "Email kamu tidak valid!";
+              break;
+            case "auth/user-not-found":
+              errMsg = "Akun dengan email tersebut tidak ditemukan!";
+              break;
+            case "auth/wrong-password":
+              errMsg = "Password yang kamu masukkan salah!";
+              break;
+            default:
+              errMsg = "Email atau password yang kamu masukkan salah!";
+              break;
+          }
+          this.$refs.alert.show(errMsg,"red accent-2");
         });
       },
     },

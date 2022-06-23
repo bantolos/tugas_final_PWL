@@ -44,7 +44,7 @@
       :disabled="!valid"
       color="success"
       class="mr-4"
-      @click="register"
+      @click="validate"
     >
       Daftar
     </v-btn>
@@ -112,12 +112,24 @@ import { db } from "../db";
               displayName: this.username
             })
             .then(() => {
-              db.collection('user').doc(res.user.uid).set({username: this.username, email: this.email, alamat: ''});
+              db.collection('user').doc(res.user.uid).set({username: this.username, email: this.email, alamat: '', gambar: ''});
               this.$router.push('/auth/login');
             });
         })
         .catch((error) => {
-          this.$refs.alert.show(error.message);
+          let errMsg = ''
+          switch(error.code) {
+            case "auth/invalid-email":
+              errMsg = "Email kamu tidak valid!";
+              break;
+            case "auth/email-already-exists":
+              errMsg = "Email tersebut sudah terdaftar!";
+              break;
+            default:
+              errMsg = "Pendaftaran akun gagal!";
+              break;
+          }
+          this.$refs.alert.show(errMsg,"red accent-2");
         });
       },
     },

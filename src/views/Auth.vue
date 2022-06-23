@@ -13,7 +13,6 @@
         >
         <img
           src="../images/logo.png"
-          alt="John"
         >
         </v-avatar>
 
@@ -22,7 +21,13 @@
           :key="link"
           text
         >
-          {{ link }}
+          <div v-if="link == 'Lukabapak'">
+            <router-link to="/" class="black--text text-decoration-none">{{ link }}</router-link>          </div>
+          <div v-else 
+          @click="maintenance()"
+          >
+            {{ link }}
+          </div>
         </v-btn>
 
         <v-spacer></v-spacer>
@@ -42,7 +47,7 @@
     <v-main class="grey lighten-3">
       <v-container>
         <v-row>
-
+        <snack-bars ref="alert"></snack-bars>
           <v-col>
             <v-sheet
               min-height="80vh"
@@ -81,6 +86,7 @@
 </template>
 
 <script>
+import SnackBars from '@/components/SnackBars';
   export default {
     data: () => ({
       links: [
@@ -89,5 +95,13 @@
         'Tentang',
       ],
     }),
+    methods: {
+      maintenance() {
+        this.$refs.alert.show("Maaf, fitur akan segera hadir...","yellow darken-3");
+      }
+    },
+    components: {
+      SnackBars,
+    }
   }
 </script>

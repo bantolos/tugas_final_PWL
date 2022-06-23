@@ -13,9 +13,7 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn icon>
-        <v-icon>mdi-cart</v-icon>
-      </v-btn>
+      <v-icon>mdi-cart</v-icon>
     </v-toolbar>
 
     <v-divider class="mb-2"></v-divider>
